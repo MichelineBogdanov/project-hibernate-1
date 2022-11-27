@@ -59,6 +59,9 @@ public class PlayerRepositoryDB implements IPlayerRepository {
             session.save(player);
             transaction.commit();
             return player;
+        } catch (RuntimeException e) {
+            sessionFactory.getCurrentSession().getTransaction().rollback();
+            throw e;
         }
     }
 
@@ -69,6 +72,9 @@ public class PlayerRepositoryDB implements IPlayerRepository {
             Player merge = (Player) session.merge(player);
             transaction.commit();
             return merge;
+        } catch (RuntimeException e) {
+            sessionFactory.getCurrentSession().getTransaction().rollback();
+            throw e;
         }
     }
 
@@ -86,6 +92,9 @@ public class PlayerRepositoryDB implements IPlayerRepository {
             Transaction transaction = session.beginTransaction();
             session.remove(player);
             transaction.commit();
+        } catch (RuntimeException e) {
+            sessionFactory.getCurrentSession().getTransaction().rollback();
+            throw e;
         }
     }
 
